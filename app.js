@@ -21,8 +21,58 @@ function start() {
         "Gravity": "http://www.omdbapi.com/?t=Gravity",
         "Toy Story": "http://www.omdbapi.com/?t=Toy%20Story",
         "Inception": "http://www.omdbapi.com/?t=Inception",
-        "Spirited Away": "http://www.omdbapi.com/?t=Spirited%20Away"
+        "Spirited Away": "http://www.omdbapi.com/?t=Spirit%ed%20Away"
     };
+
+    function makeMovieJSON(movieJSON) {
+
+        var sequence = Promise.resolve();
+
+        for (let movie in movieJSON) {
+
+            sequence = sequence.then(function() {
+
+                var urlArray = [].concat(movieJSON[movie]);
+
+                return getJSONFromArray(urlArray)
+                
+            })
+            .then(function(movieDetailsArray){
+
+                if (movieDetailsArray.length == 1) {
+                    finalMovieJSON[movie] = movieDetailsArray[0];    
+                }
+                else
+                {
+                    finalMovieJSON[movie] = [].concat(movieDetailsArray);    
+                }
+                
+            })
+            .catch(function(err){
+
+            });
+
+        }
+
+        return sequence;
+    };
+
+    
+
+    function getJSONFromArray(movieArray) {
+
+        return Promise.all(movieArray.map(getJSON));
+    }
+
+    function getJSON(url) {
+        console.log(url);
+        return fetch(url).then(function(response) {
+            console.log(url);
+            return response.json();
+        }).then(function(rawMovieJSON){
+            return makeFinalMoveObject(rawMovieJSON);
+        });
+    }
 
     function makeFinalMoveObject(movieDetail){
 
@@ -42,76 +92,7 @@ function start() {
         }
     };
 
-    function makeMovieJSON(movieJSON) {
-
-        var sequence;// = Promise.resolve();
-
-        for (let movie in movieJSON) {
-
-            //console.log(movieJSON[movie]);
-
-            // movieJSON[movie].forEach(function(url){
-
-
-            //     getJSON(movieJSON[movie]).then(function(movieDetailJSON){
-            //         finalMovieJSON[movie] = movieDetailJSON;
-            //     });
-            // })
-
-
-            sequence = getJSON(movieJSON[movie])
-            .then(function(movieDetailJSON) {
-                        
-                        finalMovieJSON[movie]  = makeFinalMoveObject(movieDetailJSON);
-
-                    }).catch(function(err){
-                        console.log(err);
-                    });
-
-
-            // sequence = sequence.then(function() {
-
-
-            //     //var urlArray = [].concat(movieJSON[movie]);
-
-
-            //     return getJSON(movieJSON[movie])
-            //     .then(function(movieDetailJSON) {
-            //             //console.log(movieDetailJSON);
-
-
-            //             finalMovieJSON[movie]  = makeFinalMoveObject(movieDetailJSON);
-
-            //         }); //.catch();
-            // });
-        }
-
-        return sequence;
-    };
-
-    
-
-    function getJSONFromArray(movieKey) {
-
-        movieKey.forEach(function(url) {
-            
-            return getJSON(url).then(function(movieDetailJSON){
-
-                finalMovieJSON[movie]  = makeFinalMoveObject(movieDetailJSON);    
-            });
-        });
-
-    }
-
-    function getJSON(url) {
-        console.log(url);
-        return fetch(url).then(function(response) {
-            console.log(url);
-            return response.json();
-        })
-    }
-
-    makeMovieJSON(movieJSON2).then(function() {
+    makeMovieJSON(movieJSON1).then(function() {
         
        console.log(window.finalMovieJSON);  
 
