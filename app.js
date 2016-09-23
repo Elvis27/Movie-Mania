@@ -59,22 +59,31 @@ function start() {
             // })
 
 
-            sequence = sequence.then(function() {
-
-
-                //var urlArray = [].concat(movieJSON[movie]);
-
-
-
-                return getJSON(movieJSON[movie])
-                .then(function(movieDetailJSON) {
-                        //console.log(movieDetailJSON);
-
-
+            getJSON(movieJSON[movie])
+            .then(function(movieDetailJSON) {
+                        
                         finalMovieJSON[movie]  = makeFinalMoveObject(movieDetailJSON);
 
-                    }); //.catch();
-            });
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+
+
+            // sequence = sequence.then(function() {
+
+
+            //     //var urlArray = [].concat(movieJSON[movie]);
+
+
+            //     return getJSON(movieJSON[movie])
+            //     .then(function(movieDetailJSON) {
+            //             //console.log(movieDetailJSON);
+
+
+            //             finalMovieJSON[movie]  = makeFinalMoveObject(movieDetailJSON);
+
+            //         }); //.catch();
+            // });
         }
 
         return sequence;
@@ -82,22 +91,22 @@ function start() {
 
     
 
-    // function getJSONFromArray(movieKey) {
+    function getJSONFromArray(movieKey) {
 
-    //     movieKey.forEach(function(url) {
+        movieKey.forEach(function(url) {
             
-    //         getJSON(url).then(function() {
+            return getJSON(url).then(function(movieDetailJSON){
 
+                finalMovieJSON[movie]  = makeFinalMoveObject(movieDetailJSON);    
+            });
+        });
 
-    //         });
-    //     });
-
-    // }
+    }
 
     function getJSON(url) {
-        //console.log(url);
+        console.log(url);
         return fetch(url).then(function(response) {
-            //console.log(url);
+            console.log(url);
             return response.json();
         })
     }
