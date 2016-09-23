@@ -1,5 +1,7 @@
 window.finalMovieJSON = {};
 
+document.body.innerHTML = "processing ...";
+
 function start() {
     // body...
     var finalMovieJSON = window.finalMovieJSON;
@@ -76,7 +78,6 @@ function start() {
 
     function makeFinalMoveObject(movieDetail){
 
-
         return    {
             'Title' : movieDetail.Title,
             'Year' : movieDetail.Year,
@@ -87,16 +88,14 @@ function start() {
                 rating : movieDetail.imdbRating,
                 votes : movieDetail.imdbVotes,
             },
-            'summary' : movieDetail.Plot
-
+            'summary' : `${movieDetail.Title} was released on ${movieDetail.Released}. It's a ${movieDetail.Rated} Rated movie. Casting ${movieDetail.Actors.split(',').length} Actors with runtime of ${movieDetail.Runtime} in ${movieDetail.Language}`
         }
     };
 
     makeMovieJSON(movieJSON1).then(function() {
         
+       document.body.innerHTML =  JSON.stringify(window.finalMovieJSON);
        console.log(window.finalMovieJSON);  
-
-
 
     });
 };
