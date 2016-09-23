@@ -44,7 +44,7 @@ function start() {
 
     function makeMovieJSON(movieJSON) {
 
-        var sequence = Promise.resolve();
+        var sequence;// = Promise.resolve();
 
         for (let movie in movieJSON) {
 
@@ -59,7 +59,7 @@ function start() {
             // })
 
 
-            getJSON(movieJSON[movie])
+            sequence = getJSON(movieJSON[movie])
             .then(function(movieDetailJSON) {
                         
                         finalMovieJSON[movie]  = makeFinalMoveObject(movieDetailJSON);
